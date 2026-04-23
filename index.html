@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="brand-block">
+                <p class="eyebrow">Interactive Learning</p>
+                <h2>DSA Visualizer</h2>
+                <p class="brand-copy">Explore linked lists, stacks, and queues with a cleaner visual workspace.</p>
+            </div>
+
+            <ul class="nav-list">
+                <li class="active" onclick="switchTab('linkedlist')">
+                    <span class="nav-label">Linked List</span>
+                    <span class="nav-hint">Insert and delete by position</span>
+                </li>
+                <li onclick="switchTab('stack')">
+                    <span class="nav-label">Stack</span>
+                    <span class="nav-hint">Push, pop, peek operations</span>
+                </li>
+                <li onclick="switchTab('queue')">
+                    <span class="nav-label">Queue</span>
+                    <span class="nav-hint">Enqueue and dequeue flow</span>
+                </li>
+                <li onclick="switchTab('application')" class="app-nav-item">
+                    <span class="nav-label">Application</span>
+                    <span class="nav-hint">Elevator Simulation</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">Responsive workspace for focused visualization</div>
+        </nav>
+
+        <main class="workspace">
+            <header class="workspace-header">
+                <div>
+                    <p class="section-kicker">Data Structure Playground</p>
+                    <h1 id="ds-title">Linked List Operations</h1>
+                    <p class="workspace-subtitle">Use the controls below to perform operations and watch the structure update in real time.</p>
+                </div>
+            </header>
+
+            <section class="controls-panel">
+                <div class="panel-heading">
+                    <h2>Controls</h2>
+                    <p>Enter values and run operations without changing the underlying behavior.</p>
+                </div>
+
+                <div class="controls">
+                    <div class="input-cluster">
+                        <label class="field">
+                            <span>Value</span>
+                            <input type="number" id="inputValue" placeholder="Enter Value">
+                        </label>
+                        <label class="field">
+                            <span>Position</span>
+                            <input type="number" id="inputPos" placeholder="Position (1-based)">
+                        </label>
+                    </div>
+
+                    <div id="btn-group-ll" class="btn-group">
+                        <button onclick="operate('ll_insert_start')">Insert Start</button>
+                        <button onclick="operate('ll_insert_end')">Insert End</button>
+                        <button onclick="operate('ll_insert_pos')">Insert at Pos</button>
+                        <button onclick="operate('ll_delete_pos')" class="danger">Delete at Pos</button>
+                    </div>
+
+                    <div id="btn-group-stack" class="btn-group hidden">
+                        <button onclick="operate('stack_push')">Push</button>
+                        <button onclick="operate('stack_pop')" class="danger">Pop</button>
+                        <button onclick="operate('stack_peek')">Peek</button>
+                        <button onclick="operate('stack_isempty')">Is Empty?</button>
+                    </div>
+
+                    <div id="btn-group-queue" class="btn-group hidden">
+                        <button onclick="operate('queue_enqueue')">Enqueue</button>
+                        <button onclick="operate('queue_dequeue')" class="danger">Dequeue</button>
+                    </div>
+
+                    <div id="btn-group-app" class="btn-group hidden">
+                        <button onclick="resetElevator()">Reset</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="visualization-area">
+                <div class="panel-heading">
+                    <h2>Visualization Output</h2>
+                    <p>Canvas and activity log update as operations are performed.</p>
+                </div>
+
+                <div id="visualCanvas" class="canvas horizontal">
+                    <span class="placeholder">Waiting for operations...</span>
+                </div>
+
+                <div class="console-panel">
+                    <div class="console-label">Console</div>
+                    <div id="console-log" class="console-log"></div>
+                </div>
+            </section>
+ 
+            <!-- Elevator Simul ation Section -->
+            <section id="elevator-section" class="elevator-section hidden">
+                <div class="panel-heading">
+                    <h2>Elevator Simulation</h2>
+                    <p>Real-world application of Linked List, Stack, and Queue</p>
+                </div>
+
+                <div class="elevator-container">
+                    <!-- Building -->
+                    <div class="building">
+                        <div class="floors-container" id="floorsContainer">
+                            <!-- Floors will be generated by JS -->
+                        </div>
+                        <div class="elevator-shaft">
+                            <div class="elevator" id="elevator">
+                                <div class="elevator-door-left"></div>
+                                <div class="elevator-door-right"></div>
+                                <div class="elevator-display">
+                                    <span id="elevatorFloor">0</span>
+                                </div>
+                                <div class="elevator-direction" id="elevatorDirection">IDLE</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Control Panel -->
+                    <div class="elevator-controls">
+                        <div class="control-panel-inside">
+                            <h3>Inside Lift</h3>
+                            <div class="floor-buttons" id="insideButtons">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+
+                        <div class="control-panel-outside">
+                            <h3>Floor Calls</h3>
+                            <div class="floor-call-buttons" id="callButtons">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Structure Visualizations -->
+                <div class="ds-visualizations">
+                    <div class="ds-panel queue-panel">
+                        <h3>Queue (Requests)</h3>
+                        <div class="ds-content" id="queueVisualization">
+                            <span class="placeholder">Empty queue</span>
+                        </div>
+                        <div class="ds-explanation" id="queueExplanation">
+                            Waiting for requests...
+                        </div>
+                    </div>
+
+                    <div class="ds-panel stack-panel">
+                        <h3>Stack (History)</h3>
+                        <div class="ds-content" id="stackVisualization">
+                            <span class="placeholder">Empty stack</span>
+                        </div>
+                        <div class="ds-explanation" id="stackExplanation">
+                            No floors visited yet...
+                        </div>
+                    </div>
+
+                    <div class="ds-panel ll-panel">
+                        <h3>Linked List (Floors)</h3>
+                        <div class="ds-content" id="llVisualization">
+                            <span class="placeholder">Floor nodes</span>
+                        </div>
+                        <div class="ds-explanation" id="llExplanation">
+                            Floors connected as nodes...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operation Log -->
+                <div class="operation-log">
+                    <h3>Operation Log</h3>
+                    <div id="operationLog" class="log-content">
+                        <span class="placeholder">Ready for operations...</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="historyModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeHistory()">&times;</span>
+            <h2 id="historyTitle">Operation History</h2>
+            <ul id="historyList"></ul>
+        </div>
+    </div>
+
+    <div id="floating-history" class="floating-history" onmouseenter="updateHoverHistory()">
+        <div class="history-trigger" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+                <path
+                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm1-13h-2v6h5v-2h-3V7z" />
+            </svg>
+        </div>
+        <div id="hoverHistoryPanel" class="hover-history-panel">
+            <h3 id="hoverHistoryTitle">History</h3>
+            <ul id="hoverHistoryList"></ul>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
