@@ -20,6 +20,7 @@ extern "C" {
     int llGetSize() { return ll.size(); }
     int llGetValueAt(int index) { return ll[index]; }
 
+
     // ================= STACK =================
     void stackPush(int val) { stackArr.push_back(val); }
     void stackPop() { if (!stackArr.empty()) { stackArr.pop_back(); } }
