@@ -1,4 +1,4 @@
-﻿let actionHistory = [];
+let actionHistory = [];
 let llState = [];
 let stackState = [];
 let queueState = [];
